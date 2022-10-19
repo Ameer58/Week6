@@ -27,7 +27,7 @@ namespace NorthwindData.Services
 
         public Customer GetCustomerById(string CustomerId)
         {
-            throw new NotImplementedException();
+            return _context.Customers.Find(CustomerId);
         }
 
         public List<Customer> GetCustomers()
@@ -37,12 +37,13 @@ namespace NorthwindData.Services
 
         public void RemoveCustomer(Customer c)
         {
-            throw new NotImplementedException();
+             _context.Customers.Remove(c);
+            _context.SaveChanges();
         }
 
         public void SaveCustomerChanges()
         {
-            throw new NotImplementedException();
+            _context.SaveChanges();
         }
     }
 }

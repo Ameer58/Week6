@@ -18,7 +18,7 @@ namespace NorthwindBusiness
 
         public CustomerManager(IService service)
         {
-            _service = service;
+            _service = service == null ? throw new ArgumentException("IService cannot be null") : service;
             
         }
 
@@ -42,9 +42,9 @@ namespace NorthwindBusiness
 
         public bool Update(string customerId, string contactName, string country, string city, string postcode)
         {
-            using (var db = new NorthwindContext())
-            {
-                var customer = db.Customers.Where(c => c.CustomerId == customerId).FirstOrDefault();
+            
+            
+                var customer = _service.GetCustomerById(customerId);
                 if (customer == null)
                 {
                     Debug.WriteLine($"Customer {customerId} not found");
@@ -57,7 +57,7 @@ namespace NorthwindBusiness
                 // write changes to database
                 try
                 {
-                    db.SaveChanges();
+                _service.SaveCustomerChanges();
                     SelectedCustomer = customer;
                 }
                 catch (Exception e)
@@ -65,24 +65,23 @@ namespace NorthwindBusiness
                     Debug.WriteLine($"Error updating {customerId}");
                     return false;
                 }
-            }
+           
             return true;
         }
 
         public bool Delete(string customerId)
         {
-            using (var db = new NorthwindContext())
-            {
-                var customer = db.Customers.Where(c => c.CustomerId == customerId).FirstOrDefault();
+            
+                var customer = _service.GetCustomerById(customerId);
                 if (customer == null)
                 {
                     Debug.WriteLine($"Customer {customerId} not found");
                     return false;
                 }
-                db.Customers.Remove(customer);
+                _service.RemoveCustomer(customer);
                 SelectedCustomer = null;
-                db.SaveChanges();
-            }
+                
+            
             return true;
         }
     }

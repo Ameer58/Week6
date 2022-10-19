@@ -71,7 +71,7 @@ namespace NorthwindTests
                 _customerManager.Update("Mand", "N", "Holland", "Adam", "2036HD");
                 var updated = db.Customers.Find("Mand");
 
-                Assert.That(updated.ToString(), Is.EqualTo(_customerManager.SelectedCustomer.ToString()));
+                Assert.That(updated.ContactName, Is.EqualTo(_customerManager.SelectedCustomer.ContactName));
 
             }
 
